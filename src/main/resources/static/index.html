@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        *{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image:url('imagenes/background.jpeg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+section{
+    position: relative;
+    max-width: 400px;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(55px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 3rem;
+}
+
+.inputbox input{
+    width: 100%;
+    height: 60px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0 35px 0 5px;
+    color:white;
+
+}
+
+.inputbox ion-icon {
+    position: absolute;
+    right: 8px;
+    color: white;
+    font-size: 1.2rem;
+    top: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+
+}
+
+.inputbox {
+    position: relative;
+    margin: 30px 0;
+    max-width: 310px;
+    border-bottom: 2px solid #fff;
+}
+
+.inputbox label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color:rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+input:focus ~ label,
+input:valid ~ label {
+    top: -10px;
+    font-size: 12px;
+    color: #fff;
+    background-color: transparent;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+button {
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 1);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+    </style>
+</head>
+
+<body>
+<section>
+    <form id="login-form">
+        <h1> Log in </h1>
+        <div class="inputbox">
+            <ion-icon name="mail-outline"></ion-icon>
+            <input type="email" id="email" required>
+            <label for=>User <i class='bx bxs-user bx-tada' ></i></label>
+        </div>
+        <div class="inputbox">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <input type="password" id="password" required>
+            <label for=>Password <i class='bx bx-lock-alt bx-tada' ></i></label>
+        </div>
+
+        <button type="submit">Log in</button>
+
+    </form>
+</section>
+
+<script>
+    const form = document.getElementById('login-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const loginData = {
+            email,
+            password
+        };
+        try {
+            const response = await fetch('http://localhost:8080/api/V1/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            });
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Login successful!');
+                console.log('Token:', data.message);
+                localStorage.setItem('token', data.message);
+                window.location.href = 'http://localhost:63342/loginroles/static/inicio.html';
+            } else {
+                console.error('Error:', data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+</script>
+</body>
+</html>
